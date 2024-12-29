@@ -79,7 +79,12 @@ def get_message_content(service, message_id, user_id='me'):
 
         import html
         snippet = html.unescape(message['snippet'])
-
+        print({
+            'id': message['id'],
+            'subject': subject,
+            'sender': sender,
+            'snippet': snippet
+        })
         return {
             'id': message['id'],
             'subject': subject,
@@ -256,13 +261,13 @@ def create_draft_email(service, to: str, subject: str, message_body: str):
         return None
 
 
-if __name__ == '__main__':
+def main() -> None:
     db = MockDatabase()
     response_generator = EmailResponseGenerator(db)
 
     service = get_gmail_service()
 
-    messages = list_messages(service, query='after:2024/12/22')
+    messages = list_messages(service, query='after:2024/12/29')
 
     for email in messages:
         print(f"Processing email ID: {email['id']}")
@@ -296,3 +301,7 @@ if __name__ == '__main__':
         if draft:
             print(f"Draft created for email: {content['subject']}")
             print(f"Response: {response}\n")
+
+
+if __name__ == "__main__":
+    main()
